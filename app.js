@@ -6,7 +6,7 @@ const HttpError = require("./models/Http-error");
 
 const app = express();
 app.use(bodyParser.json());
-app.use("/api/user", userRoutes);
+app.use("/api/users", userRoutes);
 app.use("/api/places", placesRoutes);
 app.use((req,res,next)=>{
     throw (new HttpError(404,'could not find this route. '))

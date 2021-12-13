@@ -1,4 +1,5 @@
 const express = require("express");
+const { check } = require("express-validator");
 const {
   getPlaceById,
   getPlacesByUserId,
@@ -13,9 +14,22 @@ placesRoutes.get("/:pid", getPlaceById);
 
 placesRoutes.get("/user/:uid", getPlacesByUserId);
 
-placesRoutes.post("/", createPlace);
+placesRoutes.post(
+  "/",
+  [
+    check("title").not().isEmpty(),
+    check("description").isLength({ min: 5 }),
+    check("address").not().isEmpty(),
+  ],
 
-placesRoutes.patch("/:pid", updatePlaceById);
+  createPlace
+);
+
+placesRoutes.patch(
+  "/:pid",
+  [check("title").not().isEmpty(), check("description").isLength({ min: 5 })],
+  updatePlaceById
+);
 
 placesRoutes.delete("/:pid", deltePlace);
 

@@ -1,13 +1,28 @@
-const express = require('express')
+const express = require("express");
+const { getAllUser, login, signup } = require("../controllers/user-controller");
 
+const { check } = require("express-validator");
 
 const userRoutes = express.Router();
 
+userRoutes.get("/", getAllUser);
+userRoutes.post(
+  "/signup",
+  [
+    check('name')
+      .not()
+      .isEmpty(),
+    check('email')
+      .normalizeEmail() // Test@test.com => test@test.com
+      .isEmail(),
+    check('password').isLength({ min: 6 })
+  ],
 
-userRoutes.get('/users',(req,res,next)=>{
-    console.log('res works')
-    res.json({"token":"!lhlkj#lwe6adjfl8aam.76dd"})
-})
+  signup
+);
+userRoutes.post("/login", [
+    check("email").not().isEmpty(),
+    check("password").isLength({ min: 8 }),
+  ], login);
 
-
-module.exports = userRoutes
+module.exports = userRoutes;
